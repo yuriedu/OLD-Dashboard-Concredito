@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+  <head>
+    <%- include('imports/head') %>
+    <title>Concredito Cadastros</title>
+    <script src="/js/script.js"></script>
+  </head>
+  <body style="min-height: 100vh; max-width: 100vw; overflow-x: hidden; background-color: rgba(10,10,10);">
+    <div style="background-image: linear-gradient(to bottom right, rgb(120, 0, 255), rgb(0, 150, 150)); width: 100%; height: 12vh">
+      <a href="/">
+        <img src="/images/logo.png" style="height: 11vh; margin-left: 4vw">
+      </a>
+    </div>
+    <div style="font-size: 3vh; display: flex; flex-direction: row; margin-top: 10vh; color: white; width: 80vw; margin-inline: 10vw">
+      <div style="width: 30%; text-align: left;">
+        <a id="cadastrarFGTS" onclick="cadastrarFGTS()" class="buttonLogin font-1" style="padding-inline: 3vh; padding-block: 1vh; border-radius: 1vh;">Cadastrar</a>
+      </div>
+      <div style="width: 40%; text-align: center">
+        <a class="font-1" style="font-size: 5vh;">FGTS:</a>
+      </div>
+      <div style="width: 30%; text-align: right;">
+        <a id="refreshFGTS" onclick="refreshFGTS()" class="buttonLogin font-1" style="padding-inline: 3vh; padding-block: 1vh; border-radius: 1vh;">Atualizar</a>
+      </div>
+    </div>
+    <div id="tableFGTS">
+      <div style="position: relative; border: 0.1vh solid white; min-height: 10vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;">
+        <div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;">
+          <div style="width: 10vw"><a>AF</a></div>
+          <div style="width: 30vw"><a>Nome do Cliente</a></div>
+          <div style="width: 10vw"><a>CPF</a></div>
+          <div style="width: 15vw"><a>Banco</a></div>
+          <div style="width: 15vw"><a>Valor Liquido</a></div>
+          <div style="width: 20vw"><a>Tabela</a></div>
+        </div>
+        <div id="propostasFGTS">
+
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: right; margin-top: 2vh; margin-right: 10vw;">
+      <input id="token" type="Number" placeholder="Token BMG" style="background: transparent; border: none; border-bottom: 0.1vh solid white; color: white; font-size: 2vh; width:8vw">
+    </div>
+
+
+    <div style="font-size: 3vh; display: flex; flex-direction: row; margin-top: 10vh; color: white; width: 80vw; margin-inline: 10vw">
+      <div style="width: 30%; text-align: left;">
+        <a id="cadastrarINSS" onclick="cadastrarINSS()" class="buttonLogin font-1" style="padding-inline: 3vh; padding-block: 1vh; border-radius: 1vh;">Cadastrar</a>
+      </div>
+      <div style="width: 40%; text-align: center">
+        <a class="font-1" style="font-size: 5vh;">INSS:</a>
+      </div>
+      <div style="width: 30%; text-align: right;">
+        <a id="refreshINSS" onclick="refreshINSS()" class="buttonLogin font-1" style="padding-inline: 3vh; padding-block: 1vh; border-radius: 1vh;">Atualizar</a>
+      </div>
+    </div>
+    <div id="tableINSS">
+      <div style="position: relative; border: 0.1vh solid white; min-height: 10vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;">
+        <div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;">
+          <div style="width: 10vw"><a>AF</a></div>
+          <div style="width: 30vw"><a>Nome do Cliente</a></div>
+          <div style="width: 10vw"><a>CPF</a></div>
+          <div style="width: 15vw"><a>Banco</a></div>
+          <div style="width: 15vw"><a>Valor Liquido</a></div>
+          <div style="width: 20vw"><a>Tabela</a></div>
+        </div>
+        <div id="propostasINSS">
+
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function refreshFGTS() {
+      if (document.getElementById('refreshFGTS').classList.contains('buttonBlock')) return alert('Aguarde...')
+      document.getElementById('refreshFGTS').classList.add("buttonBlock");
+      document.getElementById('cadastrarFGTS').classList.add("buttonBlock");
+      document.getElementById('tableFGTS').innerHTML = `<div style="position: relative; border: 0.1vh solid white; min-height: 10vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;"><div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>AF</a></div><div style="width: 30vw"><a>Nome do Cliente</a></div><div style="width: 10vw"><a>CPF</a></div><div style="width: 15vw"><a>Banco</a></div><div style="width: 15vw"><a>Valor Liquido</a></div><div style="width: 20vw"><a>Tabela</a></div></div><div id="propostasFGTS"></div>`
+      document.getElementById('propostasFGTS').innerHTML = `<div style="position: absolute; top: 8vh; left: 50%; margin-top: 0vh; margin-left: -2vh"><div class="loader-wheel"></div><div class="loader-text font-5"></div></div>`
+      $.ajax({ method: "post",url: `/refreshFGTS`,
+        success: function(s) {
+          document.getElementById('propostasFGTS').innerHTML = ``
+          if (s.recordsets[0] && s.recordsets[0].length >= 1) {
+            s.recordsets[0].forEach((client, index)=> {
+              document.getElementById('propostasFGTS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${client.IdContrato}</a></div><div style="width: 30vw"><a>${client.NomeCliente}</a></div><div style="width: 10vw"><a>${client.Cpf}</a></div><div style="width: 15vw"><a>${client.BancoContrato}</a></div><div style="width: 15vw"><a>${client.Valor}</a></div><div style="width: 20vw"><a>${client.Tabela}</a></div></div>`
+            })
+            document.getElementById('cadastrarFGTS').classList.remove("buttonBlock");
+          } else document.getElementById('propostasFGTS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50)"></div><div class="font-1" style="font-size: 2vh; margin-top: 2.5vh; font-weight: 0;"><a>Nenhuma proposta no robo</a></div>`
+          document.getElementById('refreshFGTS').classList.remove("buttonBlock");
+        },
+        error: function(e) { return alert(e.responseText); location.href = `/` }
+      })
+    }
+    function cadastrarFGTS() {
+      if (document.getElementById('refreshFGTS').classList.contains('buttonBlock')) return alert('Aguarde...')
+      if (document.getElementById('cadastrarFGTS').classList.contains('buttonBlock')) return alert('Aguarde...')
+      document.getElementById('refreshFGTS').classList.add("buttonBlock");
+      document.getElementById('cadastrarFGTS').classList.add("buttonBlock");
+      document.getElementById('propostasFGTS').innerHTML += `<div style="position: absolute; top: 8vh; left: 50%; margin-top: 0vh; margin-left: -2vh"><div class="loader-wheel"></div><div class="loader-text font-5"></div></div>`
+      $.ajax({ method: "post",url: `/cadastrarFGTS`, data: { token: document.getElementById('token') ? document.getElementById('token').value : false },
+        success: function(s) {
+          if (s.sucess.length >= 1 || s.erros.length >= 1) {
+            document.getElementById('tableFGTS').innerHTML = ``
+            if (s.sucess.length >= 1) {
+              document.getElementById('tableFGTS').innerHTML += `<div style="margin-top: 1vh; position: relative; border: 0.1vh solid white; min-height: 8vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;"><div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>AF</a></div><div style="width: 30vw"><a>Nome do Cliente</a></div><div style="width: 10vw"><a>CPF</a></div><div style="width: 50vw"><a>Sucessos</a></div></div><div id="sucessosFGTS"></div></div>`
+              s.sucess.forEach((element, index)=>{
+                document.getElementById('sucessosFGTS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${element.client.IdContrato}</a></div><div style="width: 30vw"><a>${element.client.NomeCliente}</a></div><div style="width: 10vw"><a>${element.client.Cpf}</a></div><div style="width: 50vw"><a>${element.data}</a></div></div>`
+              })
+            }
+            if (s.erros.length >= 1) {
+              document.getElementById('tableFGTS').innerHTML += `<div style="position: relative; border: 0.1vh solid white; min-height: 8vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;"><div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>AF</a></div><div style="width: 30vw"><a>Nome do Cliente</a></div><div style="width: 10vw"><a>CPF</a></div><div style="width: 50vw"><a>Erros</a></div></div><div id="errosFGTS"></div></div>`
+              s.erros.forEach((element, index)=>{
+                document.getElementById('errosFGTS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${element.client.IdContrato}</a></div><div style="width: 30vw"><a>${element.client.NomeCliente}</a></div><div style="width: 10vw"><a>${element.client.Cpf}</a></div><div style="width: 50vw"><a>${element.data}</a></div></div>`
+              })
+            }
+          } else return alert('[FGTS Cadastro] => Ocorreu algum erro indefinido! Reporte ao Yuri...');
+          document.getElementById('refreshFGTS').classList.remove("buttonBlock");
+        },
+        error: function(e) { return alert(e.responseText); location.href = `/` }
+      })
+    }
+    function refreshINSS() {
+      if (document.getElementById('refreshINSS').classList.contains('buttonBlock')) return alert('Aguarde...')
+      document.getElementById('refreshINSS').classList.add("buttonBlock");
+      document.getElementById('cadastrarINSS').classList.add("buttonBlock");
+      document.getElementById('tableINSS').innerHTML = `<div style="position: relative; border: 0.1vh solid white; min-height: 10vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;"><div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>AF</a></div><div style="width: 30vw"><a>Nome do Cliente</a></div><div style="width: 10vw"><a>CPF</a></div><div style="width: 15vw"><a>Banco</a></div><div style="width: 15vw"><a>Valor Liquido</a></div><div style="width: 20vw"><a>Tabela</a></div></div><div id="propostasINSS"></div>`
+      document.getElementById('propostasINSS').innerHTML = `<div style="position: absolute; top: 8vh; left: 50%; margin-top: 0vh; margin-left: -2vh"><div class="loader-wheel"></div><div class="loader-text font-5"></div></div>`
+      $.ajax({ method: "post",url: `/refreshINSS`,
+        success: function(s) {
+          document.getElementById('propostasINSS').innerHTML = ``
+          if (s.default && s.default.recordsets && s.default.recordsets[0] && s.default.recordsets[0].length >= 1) {
+            s.default.recordsets[0].forEach((client, index)=> {
+              document.getElementById('propostasINSS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${client.IdContrato}</a></div><div style="width: 30vw"><a>${client.NomeCliente}</a></div><div style="width: 10vw"><a>${client.Cpf}</a></div><div style="width: 15vw"><a>${client.BancoContrato}</a></div><div style="width: 15vw"><a>${client.Valor}</a></div><div style="width: 20vw"><a>${client.Tabela}</a></div></div>`
+            })
+          }
+          if (s.cart && s.cart.recordsets && s.cart.recordsets[0] && s.cart.recordsets[0].length >= 1) {
+            s.cart.recordsets[0].forEach((client, index)=> {
+              document.getElementById('propostasINSS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${client.IdContrato}</a></div><div style="width: 30vw"><a>${client.NomeCliente}</a></div><div style="width: 10vw"><a>${client.Cpf}</a></div><div style="width: 15vw"><a>${client.BancoContrato}</a></div><div style="width: 15vw"><a>${client.Valor}</a></div><div style="width: 20vw"><a>${client.Tabela}</a></div></div>`
+            })
+          }
+          if (s.default && s.default.recordsets && s.default.recordsets[0] && s.default.recordsets[0].length >= 1 || s.cart && s.cart.recordsets && s.cart.recordsets[0] && s.cart.recordsets[0].length >= 1) {
+            document.getElementById('cadastrarINSS').classList.remove("buttonBlock");
+          } else document.getElementById('propostasINSS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50)"></div><div class="font-1" style="font-size: 2vh; margin-top: 2.5vh; font-weight: 0;"><a>Nenhuma proposta no robo</a></div>`
+          document.getElementById('refreshINSS').classList.remove("buttonBlock");
+        },
+        error: function(e) { return alert(e.responseText); location.href = `/` }
+      })
+    }
+    function cadastrarINSS() {
+      if (document.getElementById('refreshINSS').classList.contains('buttonBlock')) return alert('Aguarde...')
+      if (document.getElementById('cadastrarINSS').classList.contains('buttonBlock')) return alert('Aguarde...')
+      document.getElementById('refreshINSS').classList.add("buttonBlock");
+      document.getElementById('cadastrarINSS').classList.add("buttonBlock");
+      document.getElementById('propostasINSS').innerHTML += `<div style="position: absolute; top: 8vh; left: 50%; margin-top: 0vh; margin-left: -2vh"><div class="loader-wheel"></div><div class="loader-text font-5"></div></div>`
+      $.ajax({ method: "post",url: `/cadastrarINSS`,
+        success: function(s) {
+          if (s.sucess.length >= 1 || s.erros.length >= 1) {
+            document.getElementById('tableINSS').innerHTML = ``
+            if (s.sucess.length >= 1) {
+              document.getElementById('tableINSS').innerHTML += `<div style="margin-top: 1vh; position: relative; border: 0.1vh solid white; min-height: 8vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;"><div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>AF</a></div><div style="width: 30vw"><a>Nome do Cliente</a></div><div style="width: 10vw"><a>CPF</a></div><div style="width: 50vw"><a>Sucessos</a></div></div><div id="sucessosINSS"></div></div>`
+              s.sucess.forEach((element, index)=>{
+                document.getElementById('sucessosINSS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${element.client.IdContrato}</a></div><div style="width: 30vw"><a>${element.client.NomeCliente}</a></div><div style="width: 10vw"><a>${element.client.Cpf}</a></div><div style="width: 50vw"><a>${element.data}</a></div></div>`
+              })
+            }
+            if (s.erros.length >= 1) {
+              document.getElementById('tableINSS').innerHTML += `<div style="position: relative; border: 0.1vh solid white; min-height: 8vh; width: 80vw; margin-inline: 10vw; color: white; font-size: 3vh; text-align: center; padding-block: 2vh;"><div class="font-1" style="margin-bottom: 1vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>AF</a></div><div style="width: 30vw"><a>Nome do Cliente</a></div><div style="width: 10vw"><a>CPF</a></div><div style="width: 50vw"><a>Erros</a></div></div><div id="errosINSS"></div></div>`
+              s.erros.forEach((element, index)=>{
+                document.getElementById('errosINSS').innerHTML += `<div style="width: 100%; height: 0.3vh; background: rgb(50,50,50); margin-top: 1vh; margin-bottom: 2vh"></div><div class="font-2" style="font-size: 2.5vh; width: 100%; display: flex; flex-direction: row; text-align: center;"><div style="width: 10vw"><a>${element.client.IdContrato}</a></div><div style="width: 30vw"><a>${element.client.NomeCliente}</a></div><div style="width: 10vw"><a>${element.client.Cpf}</a></div><div style="width: 50vw"><a>${element.data}</a></div></div>`
+              })
+            }
+          } else return alert('[INSS Cadastro] => Ocorreu algum erro indefinido! Reporte ao Yuri...');
+          document.getElementById('refreshINSS').classList.remove("buttonBlock");
+        },
+        error: function(e) { return alert(e.responseText); location.href = `/` }
+      })
+    }
+    (function () {
+      refreshFGTS()
+      refreshINSS()
+    })();
+  </script>
+</html>

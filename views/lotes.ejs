@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+  <head>
+    <%- include('imports/head') %>
+    <title>Concredito Consultas</title>
+    <script src="/js/script.js"></script>
+  </head>
+  <body style="min-height: 100vh; max-width: 100vw; overflow-x: hidden; background-color: rgba(10,10,10); color: white">
+    <div style="background-image: linear-gradient(to bottom right, rgb(120, 0, 255), rgb(0, 150, 150)); width: 100%; height: 12vh">
+      <a href="/">
+        <img src="/images/logo.png" style="height: 11vh; margin-left: 4vw">
+      </a>
+    </div>
+    <div style="width: 100vw; text-align: center; display: flex; flex-direction: column; margin-top: 8vh; justify-content: center; align-items: center;">
+      <a class="font-1" style="font-size: 4.5vh">Coloque os CPF's:</a>
+      <textarea id="cpfs" style="margin-top: 1vh; border: 0; background: transparent; border: 0.1vh solid white; color: white; width: 50vw;font-size: 2vh; height: 20vh; border-radius: 1vh;"></textarea>
+      <div style="margin-top: 4vh; display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw; margin-top: 1vh; justify-content: center; margin-bottom: 2vh">
+          <input id="resimular" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh">
+          <a style="font-size: 3vh;">Resimular CPF's já simulados</a>
+        </div>
+        <a class="font-1" style="font-size: 2.7vh;">Bancos:</a>
+        <div style="width: 40vw; text-align: left; justify-content: left; margin-inline: 30vw">
+          <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw;">
+            <input id="facta" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh;">
+            <a style="font-size: 3vh;">Facta</a>
+            <div style="margin-left: 2vh;"><a style="font-size: 3vh;">- Tabela:</a></div>
+            <select id="factaTabela" style="margin-left: 1vh; background: transparent; border: none; border-bottom: 0.1vh solid white; color: white;">
+              <option value="GOLD" style="color: black">GOLD</option>
+              <option value="NORMAL" style="color: black">NORMAL</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw; margin-top: 1vh;">
+            <input id="c6" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh;">
+            <a style="font-size: 3vh;">Banco C6</a>
+            <div style="margin-left: 2vh;"><a style="font-size: 3vh;">- Simulação:</a></div>
+            <select id="c6Type" style="margin-left: 1vh; background: transparent; border: none; border-bottom: 0.1vh solid white; color: white;">
+              <option value="POR_VALOR_TOTAL" style="color: black">Valor Total</option>
+              <option value="POR_VALOR_SOLICITADO" style="color: black">Valor Solicitado</option>
+              <option value="POR_QUANTIDADE_DE_PARCELAS" style="color: black">Quantidades de Parcelas</option>
+            </select>
+            <div style="margin-left: 2vh;"><a style="font-size: 3vh;">- Valor:</a></div>
+            <input id="c6Valor" style="background: transparent; border: none; border-bottom: 0.1vh solid white; color: white">
+          </div>
+          <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw; margin-top: 1vh;">
+            <input id="pan" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh;">
+            <a style="font-size: 3vh;">Panamericano</a>
+            <div style="margin-left: 2vh"><a style="font-size: 3vh;">- Simulação:</a></div>
+            <select id="panType" style="margin-left: 1vh; background: transparent; border: none; border-bottom: 0.1vh solid white; color: white;">
+              <option value="POR_VALOR_TOTAL" style="color: black">Valor Total</option>
+              <option value="POR_VALOR_SOLICITADO" style="color: black">Valor Solicitado</option>
+            </select>
+            <div style="margin-left: 2vh;"><a style="font-size: 3vh;">- Valor:</a></div>
+            <input id="panValor" style="background: transparent; border: none; border-bottom: 0.1vh solid white; color: white">
+          </div>
+          <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw; margin-top: 1vh;">
+            <input id="safra" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh;">
+            <a style="font-size: 3vh;">Safra</a>
+            <div style="margin-left: 2vh"><a style="font-size: 3vh;">- Parcelas:</a></div>
+            <select id="safraParcelas" style="margin-left: 1vh; background: transparent; border: none; border-bottom: 0.1vh solid white; color: white;">
+              <option value="1" style="color: black">1-5</option>
+              <option value="2" style="color: black">5-7</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw; margin-top: 1vh;">
+            <input id="mercantil" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh;">
+            <a style="font-size: 3vh;">Mercantil</a>
+          </div>
+          <div style="display: flex; flex-direction: row; width: 100vw; width: 100vw; margin-top: 1vh;">
+            <input id="bmg" type="checkbox" style="width: 3vh; height: 3vh; margin: 0; margin-right: 1vh;">
+            <a style="font-size: 3vh;">BMG</a>
+          </div>
+        </div>
+      </div>
+      <a onclick="consultar()" id="simular" class="font-1 buttonLogin" style="padding-inline: 1vw; padding-block: 1vh; border-radius: 1vh; font-size: 3vh; margin-top: 2vh">Simular</a>
+      <div id="result" style="margin-top: 3vh; width: 80%; margin-inline: 1%; justify-content: left; text-align: left; font-size: 3vh">
+        <a href="/download" target="_blank" class="font-1 buttonLogin" style="padding-inline: 1vw; padding-block: 1vh; border-radius: 1vh; font-size: 3vh; margin-top: 2vh">Download CSV</a>
+        <div id="result" style="margin-top: 3vh; width: 80%; margin-inline: 1%; justify-content: left; text-align: left; font-size: 3vh">
+        </div>
+    </div>
+  </body>
+  <script>
+    var indexAll = 0
+    async function consultar() {
+      indexAll = 0
+      if (!document.getElementById('cpfs').value) return alert("Coloque a lista de Cpf's...")
+      if (!document.getElementById('facta').checked && !document.getElementById('c6').checked && !document.getElementById('pan').checked && !document.getElementById('safra').checked && !document.getElementById('mercantil').checked && !document.getElementById('bmg').checked) return alert('Selecione algum banco...')
+      var cpfs = document.getElementById('cpfs').value.replace(/\r?\n|\r/g, "").split(",");
+      if (cpfs.length < 1) return alert("Lista de Cpf's invalido...")
+      if (document.getElementById('simular').classList.contains('buttonBlock')) return alert('Aguarde...')
+      document.getElementById('simular').classList.add("buttonBlock");
+      consultaCPF(cpfs, cpfs[indexAll], indexAll)
+    }
+    function consultaCPF(cpfs, element, i) {
+        if (element) {
+          element = element.length == 10 ? `0${element}` : element.length == 9 ? `00${element}` : element.length == 8 ? `000${element}` : element.length == 7 ? `0000${element}` : element.length == 6 ? `00000${element}` : element
+          element = element.replace('.',"").replace('.',"").replace('-','')
+          $.ajax({ method: "post",url: `/lotes`,
+            data:{ 
+              cpf: element,
+              resimular: document.getElementById('resimular').checked ? true : false,
+              facta: document.getElementById('facta').checked ? true : false,
+              factaTabela: document.getElementById('factaTabela').value,
+              c6: document.getElementById('c6').checked ? true : false,
+              c6Type: document.getElementById('c6Type').value,
+              c6Valor: document.getElementById('c6Valor').value ? document.getElementById('c6Valor').value : false,
+              pan: document.getElementById('pan').checked ? true : false,
+              panType: document.getElementById('panType').value,
+              panValor: document.getElementById('panValor').value ? document.getElementById('panValor').value : false,
+              safra: document.getElementById('safra').checked ? true : false,
+              safraParcelas: document.getElementById('safraParcelas').value,
+              mercantil: document.getElementById('mercantil').checked ? true : false,
+              bmg: document.getElementById('bmg').checked ? true : false,
+            },
+            success: async function(s) {
+              indexAll += 1
+              if (!cpfs[indexAll]) {
+                document.getElementById('simular').classList.remove("buttonBlock");
+              } else setTimeout(function(){ consultaCPF(cpfs, cpfs[indexAll], indexAll) }, 1000)
+              if (s.error) {
+                return document.getElementById('result').innerHTML += `<detail><div style="margin-block: 2vh; border: 0.1vh solid white; border-radius: 1vh; padding-inline: 2vw; display: flex; flex-direction: column;"><a>CPF: ${element.cpf}</a><a>Erro: ${s.error}</a></div></detail>`
+              } else {
+                var html = `<div style="margin-block: 2vh; padding-block: 1vh; border: 0.1vh solid white; border-radius: 1vh; padding-inline: 2vw; display: flex; flex-direction: column;">`
+                await s.forEach((element, index)=>{
+                  if (index == 0) html += `<a><span style="color: blue">CPF:</span> ${element.cpf}</a>`
+                  html += `<a><span style="color: blue">${element.bank}:</span> ${element.response.error ? element.response.error : element.response.valor+' <span style="color: blue">-</span> '+element.response.valorTotal }</a>`
+                  if (index == s.length-1) html += `</div>`
+                })
+                document.getElementById('result').innerHTML += html
+              }
+            },
+            error: function(e) {
+              alert(JSON.stringify(e))
+              indexAll += 1
+              if (!cpfs[indexAll]) {
+                document.getElementById('simular').classList.remove("buttonBlock");
+              } else setTimeout(function(){ consultaCPF(cpfs, cpfs[indexAll], indexAll) }, 1000)
+              return document.getElementById('result').innerHTML += `<detail><div style="margin-block: 2vh; border: 0.1vh solid white; border-radius: 1vh; padding-inline: 2vw; display: flex; flex-direction: column;"><a>CPF: ${element}</a><a>Erro: Ocorreu algum erro no robo! Tente novamente mais tarde...</a></div></detail>`
+            }
+          })
+        }
+      }
+    function toggle(source) {
+      checkboxes = document.getElementsByName('foo');
+      for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+      }
+    }
+    (function () {
+    })();
+  </script>
+</html>

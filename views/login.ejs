@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+  <head>
+    <%- include('imports/head') %>
+    <title>Concredito Login</title>
+  </head>
+  <body style="background-image: linear-gradient(to bottom right, rgb(120, 0, 255), rgb(0, 255, 255)); width: 100vw; height: 100vh; max-width: 100%; max-height: 100%; overflow: hidden">
+    <div style="background-color: white; height: 50vh; width: 30vw; max-height: 50vh; max-width: 30vw; overflow: hidden; margin-top: 25vh; margin-left: 35vw; border-radius: 1vh; box-shadow: 0.4vh 0.4vh 1.5vh 1vh #00000080; text-align: center;">
+      <div style="margin-top: 3vh; border-bottom: 0.1vh solid rgba(180,180,180); padding-block: 2vh; margin-inline: 5vh">
+        <p class="font-1" style="font-size: 5vh; color: black; font-weight: 800;">Concredito</p>
+      </div>
+      <div style="margin-inline: 8vh; border-bottom: 0.1vh solid black; margin-top: 6vh; display: flex; flex-direction: row;">
+        <i style="width: 10%; font-size: 3.8vh" class="fad fa-user-astronaut"></i>
+        <input id="user" style="width: 89%; margin-left: 1%; font-size: 3vh; height: 4.4vh; border: none" placeholder="Digite seu usuário">
+      </div>
+      <div style="margin-inline: 8vh; border-bottom: 0.1vh solid black; margin-top: 4vh; display: flex; flex-direction: row;">
+        <i style="width: 10%; font-size: 3.8vh" class="fad fa-lock-alt"></i>
+        <input id="password" type="password" style="width: 89%; margin-left: 1%; font-size: 3vh; height: 4.4vh; border: none" placeholder="Digite sua senha">
+      </div>
+      <div onclick="login()" class="buttonLogin" style="width: 60%; padding-block: 1.5vh; font-size: 4vh; margin-inline: 20%; margin-top: 3vh; border-radius: 8vh;">
+        <p class="font-1">Login</p>
+      </div>
+    </div>
+  </body>
+  <script>
+    function login(user, password, auto) {
+      if (!auto) {
+        if (!user) user = document.getElementById('user').value
+        if (!password) password = document.getElementById('password').value
+        if (!user || !password) return alert('Coloque o usuário e a senha')
+      }
+      $.ajax({ method: "post",url: `/login`, data: { user: user, password: password },
+        success: function(s) {
+          localStorage.setItem('user', user)
+          localStorage.setItem('password', password)
+          return location.href = `/`
+        },
+        error: function(e) {
+          if (!auto) return alert(e.responseText)
+        }
+      });
+    }(function () {
+      login(localStorage.getItem('user'), localStorage.getItem('password'), true)
+    })();
+  </script>
+</html>

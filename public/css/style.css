@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@1,200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap');
+
+.font-1 { font-family: 'Roboto', cursive; }
+.font-2 { font-family: 'Karla', sans-serif; }
+
+.buttonLogin {
+  background-image: linear-gradient(to bottom right, rgb(0, 255, 255), rgb(120, 0, 255));
+  text-align: center;
+  cursor: pointer;
+  color: white
+}
+.buttonLogin:hover {
+  background-image: linear-gradient(to bottom right, rgb(0, 116, 116), rgb(33, 0, 163));
+  color: black
+}
+.buttonBlock {
+  background-image: linear-gradient(to bottom right, rgb(22, 22, 22), rgb(128, 128, 128));
+  cursor: not-allowed;
+}
+.buttonBlock {
+  background-image: linear-gradient(to bottom right, rgb(0, 0, 0), rgb(88, 88, 88))!important;
+  cursor: not-allowed;
+}
+
+.loader-wheel {
+  animation: spin 1s infinite linear;
+  border: 0.5vh solid rgba(50, 50, 50, 0.7);
+  border-left: 0.7vh solid rgb(17, 0, 255);
+  border-radius: 50%;
+  height: 4vh;
+  width: 4vh;
+}
+.loader-text:after {
+  font-size: 3vh;
+  animation: load 2s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+}
+
+input:focus, textarea:focus, select:focus{ outline: none; }
+
+body, p { margin: 0 }

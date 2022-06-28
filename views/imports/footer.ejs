@@ -1,0 +1,9 @@
+<script>
+  function login(user, password) {
+    if (!user || !password) return location.href = `/login`
+    $.ajax({ method: "post",url: `/login`, data: { user: user, password: password },
+      success: function(s) {},
+      error: function(e) { return location.href = `/login` }
+    });
+  }(function () { login(localStorage.getItem('user'), localStorage.getItem('password'), true) })();
+</script>
