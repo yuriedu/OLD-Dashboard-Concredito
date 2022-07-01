@@ -50,7 +50,7 @@ express()
   })
   .get('/lotes/:user/:pass', async function(req, res) {
     if (req.params.user !== "Willian" || req.params.user !== "Gustavo") return res.redirect('/consultar')
-    if (req.params.user !== "willianConcredito4334" || req.params.pass !== "gustavoConcredito4334") return res.redirect('/consultar')
+    if (req.params.pass !== "willianConcredito4334" || req.params.pass !== "gustavoConcredito4334") return res.redirect('/consultar')
     res.render(__dirname+'/views/lotes.ejs', {});
   })
   .get('/download', async function(req, res){
