@@ -70,6 +70,7 @@ express()
     try {
       if (req.body.cpf && req.body.cpf.length == 11) {
         database.Lotes.findById('Lotes', async (error, table) => {
+          console.log(`Consultando Lote: ${req.body.cpf}`)
           let response = []
           if (req.body.facta == 'true') {
             response[response.length] = { cpf: req.body.cpf, bank: "FACTA FINANCEIRA", response: await FactaConsultas.simularFacta(req.body.cpf, req.body.factaTabela) };
