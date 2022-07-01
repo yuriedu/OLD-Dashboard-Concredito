@@ -129,7 +129,8 @@
               }
             },
             error: function(e) {
-              alert(JSON.stringify(e))
+              alert('Ocorreu algum erro! A pagina será reiniciada, baixe seu csv antes que o robo reinicie!')
+              return location.reload()
               indexAll += 1
               if (!cpfs[indexAll]) {
                 document.getElementById('simular').classList.remove("buttonBlock");
