@@ -49,8 +49,8 @@ express()
     res.render(__dirname+'/views/consultar.ejs', {});
   })
   .get('/lotes/:user/:pass', async function(req, res) {
-    if (req.params.user !== "Willian" || req.params.user !== "Gustavo") return res.redirect('/consultar')
-    if (req.params.pass !== "willianConcredito4334" || req.params.pass !== "gustavoConcredito4334") return res.redirect('/consultar')
+    if (req.params.user !== "Willian" && req.params.user !== "Gustavo") return res.redirect('/consultar')
+    if (req.params.pass !== "willianConcredito4334" && req.params.pass !== "gustavoConcredito4334") return res.redirect('/consultar')
     res.render(__dirname+'/views/lotes.ejs', {});
   })
   .get('/download', async function(req, res){
@@ -73,8 +73,8 @@ express()
   .post('/lotes', async function(req, res) {
     try {
       if (req.body.cpf && req.body.cpf.length == 11) {
-        if (req.body.user !== "Willian" || req.body.user !== "Gustavo") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
-        if (req.body.pass !== "willianConcredito4334" || req.body.pass !== "gustavoConcredito4334") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
+        if (req.body.user !== "Willian" && req.body.user !== "Gustavo") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
+        if (req.body.pass !== "willianConcredito4334" && req.body.pass !== "gustavoConcredito4334") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
         database.Lotes.findById('Lotes', async (error, table) => {
           if (consultandoLotes) return res.send({cpf: req.body.cpf, error: 'ALGUEM JÁ ESTÁ CONSULTANDO NO MOMENTE! PESSO QUE FECHE A PAGINA E ESPERE A OUTRA PESSOA CONSULTAR!'})
           consultandoLotes = true
