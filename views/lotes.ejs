@@ -96,6 +96,8 @@
           element = element.replace('.',"").replace('.',"").replace('-','')
           $.ajax({ method: "post",url: `/lotes`,
             data:{ 
+              user: window.location.pathname.split('/')[2],
+              pass: window.location.pathname.split('/')[3],
               cpf: element,
               resimular: document.getElementById('resimular').checked ? true : false,
               facta: document.getElementById('facta').checked ? true : false,
@@ -115,7 +117,7 @@
               indexAll += 1
               if (!cpfs[indexAll]) {
                 document.getElementById('simular').classList.remove("buttonBlock");
-              } else setTimeout(function(){ consultaCPF(cpfs, cpfs[indexAll], indexAll) }, 5000)
+              } else consultaCPF(cpfs, cpfs[indexAll], indexAll)
               if (s.error) {
                 return document.getElementById('result').innerHTML += `<detail><div style="margin-block: 2vh; border: 0.1vh solid white; border-radius: 1vh; padding-inline: 2vw; display: flex; flex-direction: column;"><a>CPF: ${element.cpf}</a><a>Erro: ${s.error}</a></div></detail>`
               } else {
@@ -134,7 +136,7 @@
               indexAll += 1
               if (!cpfs[indexAll]) {
                 document.getElementById('simular').classList.remove("buttonBlock");
-              } else setTimeout(function(){ consultaCPF(cpfs, cpfs[indexAll], indexAll) }, 5000)
+              } else consultaCPF(cpfs, cpfs[indexAll], indexAll)
               return document.getElementById('result').innerHTML += `<detail><div style="margin-block: 2vh; border: 0.1vh solid white; border-radius: 1vh; padding-inline: 2vw; display: flex; flex-direction: column;"><a>CPF: ${element}</a><a>Erro: Ocorreu algum erro no robo! Tente novamente mais tarde...</a></div></detail>`
             }
           })

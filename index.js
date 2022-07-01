@@ -31,6 +31,8 @@ var lotesCSV = []
 // const bmg = require('./src/APIs/Banrisul')
 // bmg.loadAPI()
 
+var consultandoLotes = false
+
 express()
   .use(bodyparser.json())
   .use(bodyparser.urlencoded({ extended: true }))
@@ -46,7 +48,8 @@ express()
   .get('/consultar', async function(req, res) {
     res.render(__dirname+'/views/consultar.ejs', {});
   })
-  .get('/lotes', async function(req, res) {
+  .get('/lotes/:user/:pass', async function(req, res) {
+    if (req.params.user !== "Master" || req.params.pass !== "MasterConcredito4334") return res.redirect('/consultar')
     res.render(__dirname+'/views/lotes.ejs', {});
   })
   .get('/download', async function(req, res){
@@ -69,14 +72,22 @@ express()
   .post('/lotes', async function(req, res) {
     try {
       if (req.body.cpf && req.body.cpf.length == 11) {
+        if (req.body.user !== "Willian" || req.body.user !== "Gustavo") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
+        if (req.body.pass !== "willianConcredito4334" || req.body.pass !== "gustavoConcredito4334") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
         database.Lotes.findById('Lotes', async (error, table) => {
-          console.log(`Consultando Lote: ${req.body.cpf}`)
+          if (consultandoLotes) return res.send({cpf: req.body.cpf, error: 'ALGUEM JÁ ESTÁ CONSULTANDO NO MOMENTE! PESSO QUE FECHE A PAGINA E ESPERE A OUTRA PESSOA CONSULTAR!'})
+          consultandoLotes = true
+          await timeout(3000)
+          console.log(`Consulta em Lotes - USER: ${req.body.user} - CPF: ${req.body.cpf}`)
           let response = []
           if (req.body.facta == 'true') {
             response[response.length] = { cpf: req.body.cpf, bank: "FACTA FINANCEIRA", response: await FactaConsultas.simularFacta(req.body.cpf, req.body.factaTabela) };
           }
           if (req.body.c6 == 'true') {
-            if (req.body.c6Type == 'POR_VALOR_SOLICITADO' && !req.body.c6Valor) return res.send({cpf: req.body.cpf, error: 'Valor não colocado...'})
+            if (req.body.c6Type == 'POR_VALOR_SOLICITADO' && !req.body.c6Valor) {
+              consultandoLotes = false
+              return res.send({cpf: req.body.cpf, error: 'Valor não colocado...'})
+            }
             response[response.length] = { cpf: req.body.cpf, bank: "BANCO C6", response: await C6Consultas.consultarC6(req.body.cpf, req.body.c6Type, req.body.c6Valor) };
           }
           if (req.body.pan == 'true') {
@@ -91,7 +102,10 @@ express()
           if (req.body.bmg == 'true') {
             response[response.length] = { cpf: req.body.cpf, bank: "BMG", response: await BMGConsultas.consultarBMG(req.body.cpf) };
           }
-          if (response.length <= 0) return res.send({cpf: req.body.cpf, error: 'CPF não foi consultado por algum erro na API! Tente novamente...'})
+          if (response.length <= 0) {
+            consultandoLotes = false
+            return res.send({cpf: req.body.cpf, error: 'CPF não foi consultado por algum erro na API! Tente novamente...'})
+          }
           await response.forEach((element,index)=>{
             if (!element.cpf || !element.response) return;
             if (lotesCSV.findIndex(r=>r.cpf == element.cpf && r.bank == element.bank) < 0) {
@@ -114,10 +128,15 @@ express()
               }
             }
           })
+          consultandoLotes = false
           return res.send(response)
         })
-      } else return res.send({cpf: req.body.cpf, error: 'Cpf Invalido...'})
+      } else {
+        consultandoLotes = false
+        return res.send({cpf: req.body.cpf, error: 'Cpf Invalido...'})
+      }
     } catch(e) {
+      consultandoLotes = false
       return res.send({cpf: req.body.cpf, error: 'CPF não foi consultado por algum erro na API! Tente novamente...'})
     }
   })
@@ -274,6 +293,8 @@ express()
     if (err) return console.log(`[Consultas WebSite] => Site Error:\n${err}`)
     console.log(`[Consultas WebSite] => WebSite Loaded!`)
   });
+
+async function timeout(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
 function removeSpaces(value) {
   if (typeof value == "string") {
