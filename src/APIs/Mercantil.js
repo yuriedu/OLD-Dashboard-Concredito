@@ -66,7 +66,7 @@ async function calculateNetValue(data, info) {
   if (!info) console.log(`[API Mercantil] => calculateNetValue...`)
   try {
     const response = await infos.api.post(`${infos.url}PropostasExternas/v1/Simulacoes/Fgts`, data)
-    if (response.data && response.data.errors && response.data.errors[0] && response.data.errors[0].message) return response.data.errors[0].message
+    if (response.data && response.data.errors && response.data.errors[0] && response.data.errors[0].message) return err.response
     return response;
   } catch(err) {
     if (err.response && (err.response.status == 401 || err.response.status == 504)){
@@ -75,6 +75,12 @@ async function calculateNetValue(data, info) {
       return await calculateNetValue(data, true)
     }
     if (err.response && err.response.data && err.response.data.errors && err.response.data.errors[0] && err.response.data.errors[0].message ) return err.response
+    if (err.response && err.response.data &&  err.response.data.includes("Unable to route to API.")) {
+      await timeout(5000);
+      await getAuthToken();
+      return await calculateNetValue(data, true)
+    }
+    if (err.response && err.response.data && err.response.data.logEntry)
     console.log(`[API Mercantil ERROR(3)] => ${err}`)
     console.log(err.response.data)
   }

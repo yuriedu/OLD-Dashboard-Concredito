@@ -76,7 +76,7 @@ express()
         if (req.body.user !== "Willian" && req.body.user !== "Gustavo") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
         if (req.body.pass !== "willianConcredito4334" && req.body.pass !== "gustavoConcredito4334") return res.send({cpf: req.body.cpf, error: 'VOCÊ NÃO TEM PERMISSÃO PARA FAZER CONSULTAS EM LOTES!'})
         database.Lotes.findById('Lotes', async (error, table) => {
-          if (consultandoLotes) return res.send({cpf: req.body.cpf, error: 'ALGUEM JÁ ESTÁ CONSULTANDO NO MOMENTE! PESSO QUE FECHE A PAGINA E ESPERE A OUTRA PESSOA CONSULTAR!'})
+          //if (consultandoLotes) return res.send({cpf: req.body.cpf, error: 'ALGUEM JÁ ESTÁ CONSULTANDO NO MOMENTE! PESSO QUE FECHE A PAGINA E ESPERE A OUTRA PESSOA CONSULTAR!'})
           consultandoLotes = true
           await timeout(3000)
           console.log(`Consulta em Lotes - USER: ${req.body.user} - CPF: ${req.body.cpf}`)
