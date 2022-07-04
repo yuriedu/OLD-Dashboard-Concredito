@@ -131,8 +131,8 @@
               }
             },
             error: function(e) {
-              alert('Ocorreu algum erro! A pagina será reiniciada, baixe seu csv antes que o robo reinicie!')
-              return location.reload()
+              return alert('Ocorreu algum erro! Provavelmente o CSV foi resetado...')
+              //return location.reload()
               indexAll += 1
               if (!cpfs[indexAll]) {
                 document.getElementById('simular').classList.remove("buttonBlock");
